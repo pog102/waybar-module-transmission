@@ -3,10 +3,10 @@ tr_detailed=$(transmission-remote --json -l | jq -r '.arguments.torrents[] | " \
 [ -z "$tr_detailed" ] && exit # exit when there are no torrents
 tr_concise=$(echo "$tr_detailed" | # The letters are for sorting and will not appear.
 	sed -e " 
-	s/.*󰏃 $/D 󰏃/;
-	s/.* $/A /;
-	s/.*$/C /;
-  s/.*\([a-zA-Z]\|\]\)$/B 󰕒/;
+	s/.*󰏃.*/D 󰏃/;
+	s/.*.*/A /;
+	s/.*.*/C /;
+  s/.*\(\]\|[a-zA-Z]\)$/B 󰕒/;
  "  |
  sort -h | uniq -c | awk '{print $3 " " $1}' | paste -sd ' ' -)
 echo '{"text":"'$tr_concise'","tooltip":"'${tr_detailed//$'\n'/\\n}'"}'
